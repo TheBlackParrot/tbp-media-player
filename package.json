@@ -1,0 +1,11 @@
+{
+	"name": "tbp-media-player",
+	"description": "Made this to experiment with. Just a basic media player.",
+	"version": "0.0.0-dev",
+	"main": "main.js",
+	"dependencies": {
+		"electron": "*",
+		"musicmetadata": "*",
+		"node-dir": "*"
+	}
+}

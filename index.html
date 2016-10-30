@@ -1,0 +1,88 @@
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+</head>
+
+<body>
+	<div class="main">
+		<table class="main_list sortable">
+			<tr>
+				<th>Title</th>
+				<th>Artist</th>
+				<th>Album</th>
+				<th>Length</th>
+			</tr>
+		</table>
+	</div>
+
+	<div class="bottom_bar">
+		<div class="art">
+			<img id="art"/>
+		</div>
+
+		<div class="details">
+			<span id="title">Title</span>
+			<span id="artist">Artist</span>
+			<span id="album">Artist</span>
+		</div>
+		<!--<canvas id="canvas" width="128" height="64">-->
+
+		<div class="progress_bg"></div>
+		<div class="progress"></div>
+
+		<div class="controls">
+			<div id="prev-button"><i class="fa fa-fast-backward fa-fw" aria-hidden="true"></i></div>
+			<div id="play-button"><i class="fa fa-play fa-fw" aria-hidden="true"></i></div>
+			<div id="next-button"><i class="fa fa-fast-forward fa-fw" aria-hidden="true"></i></div>
+		</div>
+
+		<div class="volume">
+			<i class="fa fa-volume-up vol-icon" aria-hidden="true"></i>
+			<input type="range" id="volume"/>
+		</div>
+
+		<div class="time">
+			<span id="elapsed">0:00</span> / <span id="duration">7:43</span>
+		</div>
+	</div>
+
+	<audio id="audio">
+		<source id="audio_src"/>
+	</audio>
+
+	<script>window.$ = window.jQuery = require('./jquery.js');</script>
+	<script type="text/javascript" src="sorttable.js"></script>
+	<script type="text/javascript" src="colResizable-1.6.min.js"></script>
+
+	<script>
+		const main = require("./overall.js");
+		const fs = require("fs");
+
+		$(document).on("ready", function() {
+			console.log("ready");
+
+			$(".main_list").colResizable({
+				liveDrag: true,
+				minWidth: 70
+			});
+
+			main.loadAllFiles(function() {
+				console.log("loaded files");
+				main.showMainLibrary();
+			});
+
+			$("#volume").change(function() {
+				var vol = $(this).val()/100;
+				audio.volume = vol;
+				window.localStorage.setItem("volume", vol);
+			});
+
+			main.resetVolume();
+		});
+	</script>
+</body>
+
+</html>
