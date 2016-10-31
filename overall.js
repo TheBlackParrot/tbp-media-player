@@ -1,11 +1,16 @@
-const remote = require('electron').remote;
-const {Menu, MenuItem} = remote;
+const electron = require('electron');
+const remote = electron.remote;
+const ipcRenderer = electron.ipcRenderer;
+
 const fs = require('fs');
+
 const audioMetadata = require('musicmetadata');
 const audio = require('./audio.js');
 exports.audio = audio;
+
 const bottom = require('./bottom.js');
 exports.bottom = bottom;
+
 const dir = require('node-dir');
 
 var util = require('./util.js');
@@ -247,11 +252,32 @@ function resetVolume() {
 }
 exports.resetVolume = resetVolume;
 
+ipcRenderer.on("listRowContextMenuReply", function(event, reply, file) {
+	switch(reply) {
+		case "PlayNext":
+			console.log("play next clicked");
+			queue.splice(current_queue+1, 0, file);
+			break;
+
+		case "PlayLast":
+			console.log("play last clicked");
+			queue.splice(queue.length, 0, file);
+			break;
+
+		case "RefreshData":
+			console.log("refresh clicked");
+			break;
+	}
+});
+
 $(".main_list")[0].addEventListener('contextmenu', function(event) {
 	var clicked = event.srcElement;
 	var parent = clicked.parentElement;
 
 	if($(parent).hasClass("list_row")) {
+		setActiveRow($(parent));
+		ipcRenderer.send('listRowContextMenu', $(parent).attr("file"));
+		/*
 		setActiveRow($(parent));
 		var menu = new Menu();
 
@@ -281,6 +307,7 @@ $(".main_list")[0].addEventListener('contextmenu', function(event) {
 		}));		
 
 		setTimeout(function() { menu.popup(remote.getCurrentWindow()); }, 1);
+		*/
 	}
 
     return false;
