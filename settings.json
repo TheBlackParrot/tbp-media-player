@@ -6,5 +6,9 @@
 		"black": "#333",
 		"white": "#fff",
 		"background": "#fff"
+	},
+
+	"enable": {
+		"notifications": true
 	}
 }

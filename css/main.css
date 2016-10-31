@@ -58,6 +58,7 @@ body {
 .main_list {
 	width: calc(100% - 16px);
 	table-layout: fixed;
+	border-collapse: collapse;
 }
 .main_list tr td {
 	padding-left: 8px;
@@ -86,6 +87,7 @@ body {
 	text-align: right;
 	width: 70px;
 }
+
 .row_selected {
 	font-weight: 700;
 }

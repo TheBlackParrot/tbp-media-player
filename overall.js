@@ -22,6 +22,8 @@ exports.util = util;
 const color = require('./color.js');
 exports.color = color;
 
+const notify = require('./notify.js');
+
 const localStorage = window.localStorage;
 
 var music_dir = settings.music_dir;

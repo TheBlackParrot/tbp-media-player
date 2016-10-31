@@ -61,6 +61,8 @@ exports.playAudio = function(file) {
 			var metadata = main.all_files[file];
 			document.title = metadata.artist + " - " + metadata.title;
 		}, 500);
+
+		$(element).trigger("startPlaying", [main.all_files[file]]);
 	}
 
 	element.onended = function() {

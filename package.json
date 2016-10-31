@@ -6,7 +6,8 @@
 	"dependencies": {
 		"electron": "*",
 		"musicmetadata": "*",
-		"node-dir": "*"
+		"node-dir": "*",
+		"node-notifier": "*"
 	},
 	"scripts": {
 		"start": "node_modules/.bin/electron ."
