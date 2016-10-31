@@ -267,7 +267,7 @@ $(".main_list")[0].addEventListener('contextmenu', function(event) {
 			label: 'Play Last',
 			click() {
 				console.log("play last clicked");
-				queue.splice(current_queue.length, 0, $(parent).attr("file"));
+				queue.splice(queue.length, 0, $(parent).attr("file"));
 			}
 		}));
 
