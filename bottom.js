@@ -4,9 +4,21 @@ function updateArt(file) {
 	var stream = fs.createReadStream(file);
 
 	var parser = audioMetadata(stream, function(err, metadata) {
-		if(err) throw err;
-		var b64 = new Buffer(metadata.picture[0].data.toString('base64'));
+		if(err) {
+			$(".art").hide();
+			throw err;
+			return;
+		}
+		
+		try {
+			var b64 = new Buffer(metadata.picture[0].data.toString('base64'));
+		} catch(err) {
+			$(".art").hide();
+			throw err;
+			return;
+		}
 
+		$(".art").show();
 		$("#art").attr("src", "data:image/" + metadata.picture[0].format + ";base64," + b64);
 	});
 }
