@@ -175,8 +175,15 @@ function playNextInQueue() {
 exports.playNextInQueue = playNextInQueue;
 
 function setActiveRow(element) {
-	$(".row_selected").removeClass("row_selected inverse-text color-bg");
+	var old = $(".row_selected");
+
+	old.removeClass("row_selected inverse-text color-bg");
+	old.find('.list_play').removeClass("inverse-text");
+	old.find('.list_play').addClass("color-text");
+
 	element.addClass("row_selected inverse-text color-bg");
+	element.find('.list_play').removeClass("color-text");
+	element.find('.list_play').addClass("inverse-text");
 }
 
 $(".main_list").off("click").on("click", ".list_row", function(event) {
