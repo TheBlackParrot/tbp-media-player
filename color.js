@@ -27,7 +27,7 @@ function setColor(main_color, bg_color) {
 	$("#inverse-text-css").text(".inverse-text { color: " + getContrastYIQ(main_color) + "; }");
 	$("#color-text-css").text(".color-text { color: " + main_color + "; }");
 
-	$("#standard-bg-css").text(".standard-bg { background-color: " + bg_color + "; }");
+	$("#standard-bg-css").text(".standard-bg, body { background-color: " + bg_color + "; }");
 	$("#inverse-bg-css").text(".inverse-bg, #volume::-webkit-slider-runnable-track, #volume::-webkit-slider-thumb { background-color: " + getContrastYIQ(main_color) + "; }");
 	$("#color-bg-css").text(".color-bg { background-color: " + main_color + "; }");	
 }

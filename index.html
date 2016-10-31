@@ -27,13 +27,17 @@
 
 	<div class="bottom_bar color-bg inverse-text">
 		<div class="art">
-			<img id="art"/>
+			<img id="art" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA"/>
 		</div>
 
 		<div class="details">
 			<span id="title">Title</span>
 			<span id="artist">Artist</span>
 			<span id="album">Artist</span>
+		</div>
+
+		<div class="time">
+			<span id="elapsed">-:--</span> / <span id="duration">-:--</span>
 		</div>
 		<!--<canvas id="canvas" width="128" height="64">-->
 
@@ -42,17 +46,13 @@
 
 		<div class="controls">
 			<div id="prev-button"><i class="fa fa-fast-backward fa-fw inverse-text" aria-hidden="true"></i></div>
-			<div id="play-button" class="inverse-bg"><i class="fa fa-play fa-fw color-text" aria-hidden="true"></i></div>
+			<div id="play-button" class="inverse-bg color-text""><i class="fa fa-play fa-fw aria-hidden="true"></i></div>
 			<div id="next-button"><i class="fa fa-fast-forward fa-fw inverse-text" aria-hidden="true"></i></div>
 		</div>
 
 		<div class="volume">
 			<i class="fa fa-volume-up vol-icon" aria-hidden="true"></i>
 			<input type="range" id="volume" class="inverse-bg"/>
-		</div>
-
-		<div class="time">
-			<span id="elapsed">0:00</span> / <span id="duration">7:43</span>
 		</div>
 	</div>
 

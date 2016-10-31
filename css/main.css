@@ -16,20 +16,22 @@ body {
 	vertical-align: middle;
 }
 
-.art, #art {
+.art, #art, .art img {
 	height: 64px;
 	width: 64px;
-	border: none;
-	outline: none;
+	border: 0;
+	outline: 0;
 }
 .art {
 	float: left;
 }
 
 .details {
+	opacity: 0;
 	float: left;
 	line-height: 28px;
     margin-left: 8px;
+    transition: .25s;
 }
 .details span {
 	display: block;
@@ -141,8 +143,8 @@ body {
 	width: 60px;
 	padding: 2px;
 	text-align: center;
-	opacity: 0;
 	transition: .25s;
+	opacity: 0;
 }
 
 .bottom_bar:hover .time {
@@ -172,15 +174,16 @@ body {
 	line-height: 48px;
 }
 #play-button:hover {
-	background-color: #4B4BBE;
-	color: #fff;
+	background-color: #000;
+	color: #fff !important;
 }
 #prev-button, #next-button {
 	height: 24px;
 	line-height: 24px;
+	opacity: 0.66;
 }
 #prev-button:hover, #next-button:hover {
-	color: #4B4BBE;
+	opacity: 1;
 }
 
 .volume {

@@ -44,6 +44,8 @@ exports.playAudio = function(file) {
 		main.bottom.updateArt(file);
 		main.bottom.updateDetails(main.all_files[file]);
 
+		$(".details").css("opacity", "1");
+
 		$("#play-button i").removeClass("fa-play").addClass("fa-pause");
 		$("#duration").text(util.getTimeStr(element.duration));
 	}

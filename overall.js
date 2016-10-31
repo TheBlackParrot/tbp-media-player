@@ -208,9 +208,11 @@ $("#play-button").on("click", function(event) {
 		} else {
 			audio.element.play();
 		}
+		$(".details").css("opacity", "1");
 		symbol.removeClass("fa-play").addClass("fa-pause");
 	} else {
 		audio.element.pause();
+		$(".details").css("opacity", "0.5");
 		symbol.removeClass("fa-pause").addClass("fa-play");
 	}
 });
