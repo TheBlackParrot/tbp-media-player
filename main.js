@@ -10,7 +10,8 @@ var win;
 function createWindow() {
 	win = new BrowserWindow({
 		width: 1024,
-		height: 600
+		height: 600,
+		icon: './icon.png'
 	});
 
 	win.loadURL(`file://${__dirname}/index.html`);

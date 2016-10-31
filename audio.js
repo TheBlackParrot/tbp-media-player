@@ -42,7 +42,7 @@ exports.playAudio = function(file) {
 		updateNowPlayingInList(file);
 
 		main.bottom.updateArt(file);
-		main.bottom.updateDetails(main.all_files[file]);	
+		main.bottom.updateDetails(main.all_files[file]);
 
 		$("#play-button i").removeClass("fa-play").addClass("fa-pause");
 		$("#duration").text(util.getTimeStr(element.duration));
@@ -55,7 +55,10 @@ exports.playAudio = function(file) {
 			$(".progress").css("width", progress + "%");
 
 			$("#elapsed").text(util.getTimeStr(element.currentTime));
-		}, 250);
+
+			var metadata = main.all_files[file];
+			document.title = metadata.artist + " - " + metadata.title;
+		}, 500);
 	}
 
 	element.onended = function() {

@@ -16,9 +16,11 @@ const dir = require('node-dir');
 var util = require('./util.js');
 exports.util = util;
 
+var settings = JSON.parse(fs.readFileSync('./settings.json', 'utf8'));
+
 const localStorage = window.localStorage;
 
-var music_dir = "/mnt/remote/music";
+var music_dir = settings.music_dir;
 //var music_dir = "/home/theblackparrot/as2";
 var all_files = {};
 exports.all_files = all_files;
