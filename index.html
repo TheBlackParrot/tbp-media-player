@@ -4,6 +4,13 @@
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+
+	<style id="standard-text-css">.standard-text { color: #333; }</style>
+	<style id="inverse-text-css">.inverse-text { color: #fff; }</style>
+	<style id="color-text-css">.color-text { color: #7070cc; }</style>
+	<style id="standard-bg-css">.standard-bg { background-color: #fff; }</style>
+	<style id="inverse-bg-css">.inverse-bg { background-color: #333; }</style>
+	<style id="color-bg-css">.color-bg { background-color: #7070cc; }</style>
 </head>
 
 <body>
@@ -18,7 +25,7 @@
 		</table>
 	</div>
 
-	<div class="bottom_bar">
+	<div class="bottom_bar color-bg inverse-text">
 		<div class="art">
 			<img id="art"/>
 		</div>
@@ -30,18 +37,18 @@
 		</div>
 		<!--<canvas id="canvas" width="128" height="64">-->
 
-		<div class="progress_bg"></div>
-		<div class="progress"></div>
+		<div class="progress_bg inverse-bg"></div>
+		<div class="progress inverse-bg"></div>
 
 		<div class="controls">
-			<div id="prev-button"><i class="fa fa-fast-backward fa-fw" aria-hidden="true"></i></div>
-			<div id="play-button"><i class="fa fa-play fa-fw" aria-hidden="true"></i></div>
-			<div id="next-button"><i class="fa fa-fast-forward fa-fw" aria-hidden="true"></i></div>
+			<div id="prev-button"><i class="fa fa-fast-backward fa-fw inverse-text" aria-hidden="true"></i></div>
+			<div id="play-button" class="inverse-bg"><i class="fa fa-play fa-fw color-text" aria-hidden="true"></i></div>
+			<div id="next-button"><i class="fa fa-fast-forward fa-fw inverse-text" aria-hidden="true"></i></div>
 		</div>
 
 		<div class="volume">
 			<i class="fa fa-volume-up vol-icon" aria-hidden="true"></i>
-			<input type="range" id="volume"/>
+			<input type="range" id="volume" class="inverse-bg"/>
 		</div>
 
 		<div class="time">

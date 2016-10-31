@@ -4,6 +4,9 @@ const ipcRenderer = electron.ipcRenderer;
 
 const fs = require('fs');
 
+var settings = JSON.parse(fs.readFileSync('./settings.json', 'utf8'));
+exports.settings = settings;
+
 const audioMetadata = require('musicmetadata');
 const audio = require('./audio.js');
 exports.audio = audio;
@@ -16,7 +19,8 @@ const dir = require('node-dir');
 var util = require('./util.js');
 exports.util = util;
 
-var settings = JSON.parse(fs.readFileSync('./settings.json', 'utf8'));
+const color = require('./color.js');
+exports.color = color;
 
 const localStorage = window.localStorage;
 
@@ -106,7 +110,7 @@ function clearList(callback) {
 exports.clearList = clearList;
 
 function createListElement(metadata, file) {
-	var row = $('<tr class="list_row"></tr>');
+	var row = $('<tr class="list_row standard-text standard-bg"></tr>');
 	row.attr("file", file);
 
 	var title_element = $('<td></td>');
@@ -169,8 +173,8 @@ function playNextInQueue() {
 exports.playNextInQueue = playNextInQueue;
 
 function setActiveRow(element) {
-	$(".row_selected").removeClass("row_selected");
-	element.addClass("row_selected");
+	$(".row_selected").removeClass("row_selected inverse-text color-bg");
+	element.addClass("row_selected inverse-text color-bg");
 }
 
 $(".main_list").off("click").on("click", ".list_row", function(event) {

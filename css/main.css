@@ -14,8 +14,6 @@ body {
 	padding: 8px;
 	height: 64px;
 	vertical-align: middle;
-	background-color: #7070cc;
-	color: #fff;
 }
 
 .art, #art {
@@ -87,8 +85,6 @@ body {
 	width: 70px;
 }
 .row_selected {
-	background-color: #7070cc;
-	color: #fff;
 	font-weight: 700;
 }
 .row_playing {
@@ -100,9 +96,6 @@ body {
     position: relative;
     bottom: 1px;
     color: #7070cc;
-}
-.row_selected .list_play {
-	color: #fff;
 }
 /*
 #visuals {
@@ -172,8 +165,6 @@ body {
 	height: 48px;
 	width: 48px;
 	line-height: 48px;
-	background-color: #fff;
-	color: #7070cc;
 	border-radius: 100%;
 	font-size: 16pt;
 }
@@ -222,7 +213,8 @@ body {
 #volume::-webkit-slider-runnable-track {
 	width: 100%;
 	height: 3px;
-	background-color: rgba(255, 255, 255, 0.33);
+	opacity: 0.33;
+	background-color: #fff;
 }
 .vol-icon {
     line-height: 64px !important;
