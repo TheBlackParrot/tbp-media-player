@@ -1,4 +1,5 @@
 const remote = require('electron').remote;
+const {Menu, MenuItem} = remote;
 const fs = require('fs');
 const audioMetadata = require('musicmetadata');
 const audio = require('./audio.js');
@@ -160,6 +161,11 @@ function playNextInQueue() {
 }
 exports.playNextInQueue = playNextInQueue;
 
+function setActiveRow(element) {
+	$(".row_selected").removeClass("row_selected");
+	element.addClass("row_selected");
+}
+
 $(".main_list").off("click").on("click", ".list_row", function(event) {
 	var file = $(this).attr("file");
 	console.log("clicked " + file);
@@ -171,8 +177,7 @@ $(".main_list").off("click").on("click", ".list_row", function(event) {
 
 		audio.playAudio(file);
 	} else {
-		$(".row_selected").removeClass("row_selected");
-		$(this).addClass("row_selected");
+		setActiveRow($(this));
 	}
 });
 
@@ -183,7 +188,15 @@ $("#play-button").on("click", function(event) {
 	var symbol = $("#play-button i");
 
 	if(symbol.hasClass("fa-play")) {
-		audio.element.play();
+		if(!audio.element.readyState) {
+			if(queue.length) {
+				audio.playAudio(queue[0]);
+			} else {
+				return;
+			}
+		} else {
+			audio.element.play();
+		}
 		symbol.removeClass("fa-play").addClass("fa-pause");
 	} else {
 		audio.element.pause();
@@ -233,3 +246,42 @@ function resetVolume() {
 	}
 }
 exports.resetVolume = resetVolume;
+
+$(".main_list")[0].addEventListener('contextmenu', function(event) {
+	var clicked = event.srcElement;
+	var parent = clicked.parentElement;
+
+	if($(parent).hasClass("list_row")) {
+		setActiveRow($(parent));
+		var menu = new Menu();
+
+		menu.append(new MenuItem({
+			label: 'Play Next',
+			click() {
+				console.log("play next clicked");
+				queue.splice(current_queue+1, 0, $(parent).attr("file"));
+			}
+		}));
+
+		menu.append(new MenuItem({
+			label: 'Play Last',
+			click() {
+				console.log("play last clicked");
+				queue.splice(current_queue.length, 0, $(parent).attr("file"));
+			}
+		}));
+
+		menu.append(new MenuItem({type: 'separator'}));
+
+		menu.append(new MenuItem({
+			label: 'Refresh Cached Data',
+			click() {
+				console.log("refresh clicked");
+			}
+		}));		
+
+		setTimeout(function() { menu.popup(remote.getCurrentWindow()); }, 1);
+	}
+
+    return false;
+}, false);
