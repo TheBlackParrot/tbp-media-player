@@ -1,4 +1,5 @@
 const audioMetadata = require('musicmetadata');
+const audio = require('./audio.js');
 
 function updateArt(file) {
 	var stream = fs.createReadStream(file);
@@ -45,3 +46,18 @@ function stop_pb() {
 	}
 }
 exports.stop_pb = stop_pb;
+
+$(".progress_bg").mouseenter(function() {
+	$(this).css("transform", "translateY(0px)");
+	$(".progress").css("transform", "translateY(0px)");
+}).mouseleave(function() {
+	$(this).css("transform", "translateY(13px)");
+	$(".progress").css("transform", "translateY(13px)");	
+});
+
+$(".progress_bg").on("click", function(event) {
+	console.log(event);
+
+	var seek = (event.clientX / $(this).width()) * audio.element.duration;
+	audio.element.currentTime = seek;
+});
