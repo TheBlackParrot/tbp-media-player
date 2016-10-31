@@ -10,7 +10,11 @@ var context = new AudioContext();
 var source = context.createMediaElementSource(element);
 
 var gainNode = context.createGain();
-exports.volume = gainNode.gain.value;
+
+function setVolume(vol) {
+	gainNode.gain.value = vol;
+}
+exports.setVolume = setVolume;
 
 /*
 var analyser = context.createAnalyser();

@@ -76,7 +76,7 @@
 
 			$("#volume").change(function() {
 				var vol = $(this).val()/100;
-				audio.volume = vol;
+				main.audio.setVolume(vol);
 				window.localStorage.setItem("volume", vol);
 			});
 

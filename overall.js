@@ -246,7 +246,7 @@ function resetVolume() {
 	var vol = localStorage.getItem("volume");
 
 	if(vol != null) {
-		audio.volume = parseFloat(vol);
+		audio.setVolume(parseFloat(vol));
 		$("#volume").val(vol*100);
 	}
 }
