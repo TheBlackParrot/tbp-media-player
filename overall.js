@@ -222,10 +222,7 @@ $(".main_list").off("click").on("click", ".list_row", function(event) {
 	}
 });
 
-$("#play-button").on("click", function(event) {
-	console.log("clicked play button");
-	event.stopPropagation();
-
+function togglePlaybackState() {
 	var symbol = $("#play-button i");
 
 	if(symbol.hasClass("fa-play")) {
@@ -244,7 +241,14 @@ $("#play-button").on("click", function(event) {
 		audio.element.pause();
 		$(".details").css("opacity", "0.5");
 		symbol.removeClass("fa-pause").addClass("fa-play");
-	}
+	}	
+}
+
+$("#play-button").on("click", function(event) {
+	console.log("clicked play button");
+	event.stopPropagation();
+
+	togglePlaybackState();
 });
 
 $("#next-button").on("click", function(event) {
@@ -262,21 +266,25 @@ function okToRestartPlayback() {
 	return true;
 }
 
+function goBackInQueue() {
+	if(!queue.length) {
+		return;
+	}
+
+	current_queue--;
+	if(current_queue < 0) {
+		current_queue = queue.length-1;
+	}
+	audio.playAudio(queue[current_queue]);		
+}
+
 $("#prev-button").on("click", function(event) {
 	event.stopPropagation();
 
 	if(okToRestartPlayback()) {
 		audio.element.currentTime = 0;
 	} else {
-		if(!queue.length) {
-			return;
-		}
-
-		current_queue--;
-		if(current_queue < 0) {
-			current_queue = queue.length-1;
-		}
-		audio.playAudio(queue[current_queue]);		
+		goBackInQueue();	
 	}
 });
 
@@ -304,6 +312,26 @@ ipcRenderer.on("listRowContextMenuReply", function(event, reply, file) {
 
 		case "RefreshData":
 			console.log("refresh clicked");
+			break;
+	}
+});
+
+ipcRenderer.on("playback", function(event, command) {
+	switch(command) {
+		case "togglePlayPause":
+			togglePlaybackState();
+			break;
+
+		case "next":
+			playNextInQueue();
+			break;
+
+		case "previous":
+			goBackInQueue();
+			break;
+
+		case "restart":
+			audio.element.currentTime = 0;
 			break;
 	}
 });
