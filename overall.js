@@ -24,6 +24,11 @@ exports.color = color;
 
 const notify = require('./notify.js');
 
+var tmp = require('tmp');
+exports.tmp = tmp;
+var tmpArt;
+exports.tmpArt = tmpArt;
+
 const localStorage = window.localStorage;
 
 var music_dir = settings.music_dir;

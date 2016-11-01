@@ -1,7 +1,9 @@
 const audioMetadata = require('musicmetadata');
 const audio = require('./audio.js');
+const main = require('./overall.js');
+const fs = require('fs');
 
-function updateArt(file) {
+function updateArt(file, callback) {
 	var stream = fs.createReadStream(file);
 
 	var parser = audioMetadata(stream, function(err, metadata) {
@@ -19,8 +21,31 @@ function updateArt(file) {
 			return;
 		}
 
+		try {
+			// tmp doesn't seem to clean itself up?
+			fs.unlink(main.tmpArt);
+		} catch(err) {
+			// do nothing
+		}
+		
+		var art = main.tmp.fileSync({
+			mode: 0644,
+			prefix: '.',
+			postfix: '.' + metadata.picture[0].format
+		});
+		try {
+			fs.writeFileSync(art.name, metadata.picture[0].data);
+			main.tmpArt = art.name
+		} catch(err) {
+			console.warn("Unable to write art to temporary file");
+		}
+
 		$(".art").show();
 		$("#art").attr("src", "data:image/" + metadata.picture[0].format + ";base64," + b64);
+
+		if(typeof callback === "function") {
+			callback();
+		}
 	});
 }
 exports.updateArt = updateArt;

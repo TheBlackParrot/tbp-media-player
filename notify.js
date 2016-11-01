@@ -14,6 +14,6 @@ $(audio.element).on("startPlaying", function(event, metadata) {
 	notifier.notify({
 		title: metadata.title,
 		message: [metadata.artist, metadata.album].join("\r\n"),
-		icon: path.join(__dirname, 'icon.png')
+		icon: path.join(main.tmpArt)
 	});
 });
