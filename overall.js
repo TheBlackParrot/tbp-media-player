@@ -43,9 +43,7 @@ function loadAllFiles(callback) {
 			}
 		}
 
-		console.log("checking for callback");
 		if(typeof callback === "function") {
-			console.log("exists");
 			callback(files);
 		}
 	});
@@ -55,33 +53,40 @@ exports.loadAllFiles = loadAllFiles;
 function fetchMetadata(file, stream) {
 	var cached = localStorage.getItem(file);
 	if(cached) {
-		all_files[file] = JSON.parse(cached);
-		$(".main_list").append(createListElement(all_files[file], file));
+		var metadata = all_files[file] = JSON.parse(cached);
+		//$(".main_list").append(createListElement(all_files[file], file));
+		return metadata;
 	} else {
 		if(!stream) {
 			var stream = fs.createReadStream(file);
 		}
 
 		var parser = audioMetadata(stream, { duration: true }, function(err, metadata) {
-			if(err) throw err;
+			if(err) {
+				throw "Error with parsing " + file + ": " + err;
+				return;
+			}
 
 			delete metadata.picture;
 			all_files[file] = metadata;
 			localStorage.setItem(file, JSON.stringify(metadata));
 
-			$(".main_list").append(createListElement(metadata, file));
-			console.log(metadata);
-			console.log(file);
-			console.log(stream);
-
+			//$(".main_list").append(createListElement(metadata, file));
 			stream.close();
+
+			return metadata;
 		});
 	}
 }
 
 function showMainLibrary(callback) {
 	for(var file in all_files) {
-		fetchMetadata(file);
+		var metadata = fetchMetadata(file);
+		var row = createListElement(metadata, file);
+
+		if(metadata) {
+			$(".main_list").append(row);
+		}
 	}
 
 	if(typeof callback === "function") {
@@ -115,17 +120,33 @@ function createListElement(metadata, file) {
 	var row = $('<tr class="list_row standard-text standard-bg"></tr>');
 	row.attr("file", file);
 
-	var title_element = $('<td></td>');
-	title_element.text(metadata.title);
-	title_element.attr("title", metadata.title);
+	try {
+		var title_element = $('<td></td>');
+		title_element.text(metadata.title);
+		title_element.attr("title", metadata.title);
+	} catch(err) {
+		console.warn("Could not obtain title for " + file + ": " + err);
+		title_element.text(file);
+		title_element.attr("title", file);
+	}
 
-	var artist_element = $('<td></td>');
-	artist_element.text(metadata.artist.join(", "));
-	artist_element.attr("title", metadata.artist.join(", "));
+	try {
+		var artist_element = $('<td></td>');
+		artist_element.text(metadata.artist.join(", "));
+		artist_element.attr("title", metadata.artist.join(", "));
+	} catch(err) {
+		console.warn("Could not obtain artist(s) for " + file + ": " + err);
+		artist_element.text("Unknown Artist");
+		artist_element.attr("title", "Unknown Artist");
+	}
 
-	var album_element = $('<td></td>');
-	album_element.text(metadata.album);
-	album_element.attr("title", metadata.album);
+	try {
+		var album_element = $('<td></td>');
+		album_element.text(metadata.album);
+		album_element.attr("title", metadata.album);
+	} catch(err) {
+		console.warn("Could not obtain album for " + file + ": " + err);
+	}
 
 	var duration_element = $('<td></td>');
 	duration_element.text(util.getTimeStr(metadata.duration));
