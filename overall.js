@@ -378,3 +378,33 @@ $(".main_list")[0].addEventListener('contextmenu', function(event) {
 
     return false;
 }, false);
+
+const MprisService = require('mpris-service');
+var mpris = MprisService({
+	name: 'Electromeda',
+	identity: 'Electromeda media player',
+	supportedInterfaces: ['player']
+});
+
+var mpris_events = ['raise', 'quit', 'next', 'previous', 'pause', 'playpause', 'play', 'seek', 'position', 'volume'];
+mpris_events.forEach(function(event) {
+	mpris.on(event, function(data) {
+		console.log("mpris: " + event + " -- " + data);
+	});
+});
+
+mpris.on('next', function() {
+	playNextInQueue();
+});
+
+mpris.on('previous', function() {
+	if(okToRestartPlayback()) {
+		audio.element.currentTime = 0;
+	} else {
+		goBackInQueue();	
+	}	
+})
+
+mpris.on('playpause', function() {
+	togglePlaybackState();
+});
