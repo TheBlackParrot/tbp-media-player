@@ -37,17 +37,29 @@ exports.playAudio = function(file) {
 	element.load();
 
 	element.onprogress = function() {
+		var metadata = main.all_files[file];
+
 		element.play();
 
 		updateNowPlayingInList(file);
 
 		main.bottom.updateArt(file);
-		main.bottom.updateDetails(main.all_files[file]);
+		main.bottom.updateDetails(metadata);
 
 		$(".details").css("opacity", "1");
 
 		$("#play-button i").removeClass("fa-play").addClass("fa-pause");
 		$("#duration").text(util.getTimeStr(element.duration));
+
+		/* TODO: move all mpris related events to a seperate script */
+		main.mpris.metadata = {
+			'mpris:trackid': main.mpris.objectPath('CurrentTrack'),
+			'mpris:length': element.duration * 1000 * 1000,
+			'xesam:title': metadata.title,
+			'xesam:artist': metadata.artist,
+			'xesam:album': metadata.album,
+			'xesam:url': 'file://' + file
+		}
 	}
 
 	element.onplay = function() {
@@ -60,9 +72,14 @@ exports.playAudio = function(file) {
 
 			var metadata = main.all_files[file];
 			document.title = metadata.artist + " - " + metadata.title;
+
+			main.mpris.position = element.currentTime * 1000 * 1000;
 		}, 500);
 
 		$(element).trigger("startPlaying", [main.all_files[file]]);
+
+		/* TODO: move all mpris related events to a seperate script */
+		main.mpris.playbackStatus = 'Playing';
 	}
 
 	element.onended = function() {

@@ -235,12 +235,18 @@ function togglePlaybackState() {
 		} else {
 			audio.element.play();
 		}
+
 		$(".details").css("opacity", "1");
 		symbol.removeClass("fa-play").addClass("fa-pause");
+
+		mpris.playbackStatus = 'Playing';
 	} else {
 		audio.element.pause();
+
 		$(".details").css("opacity", "0.5");
 		symbol.removeClass("fa-pause").addClass("fa-play");
+
+		mpris.playbackStatus = 'Paused';
 	}	
 }
 
@@ -379,32 +385,40 @@ $(".main_list")[0].addEventListener('contextmenu', function(event) {
     return false;
 }, false);
 
-const MprisService = require('mpris-service');
-var mpris = MprisService({
-	name: 'Electromeda',
-	identity: 'Electromeda media player',
-	supportedInterfaces: ['player']
-});
-
-var mpris_events = ['raise', 'quit', 'next', 'previous', 'pause', 'playpause', 'play', 'seek', 'position', 'volume'];
-mpris_events.forEach(function(event) {
-	mpris.on(event, function(data) {
-		console.log("mpris: " + event + " -- " + data);
+if(settings.enable.mpris) {
+	const MprisService = require('mpris-service');
+	var mpris = MprisService({
+		name: 'Electromeda',
+		identity: 'Electromeda media player',
+		supportedInterfaces: ['player'],
+		supportedUriSchemes: ['file'],
+		supportedMimeTypes: ['audio/mpeg', 'audio/flac', 'audio/vorbis', 'audio/wma'],
+		minimumRate: 1,
+		maximumRate: 1
 	});
-});
 
-mpris.on('next', function() {
-	playNextInQueue();
-});
+	var mpris_events = ['raise', 'quit', 'next', 'previous', 'pause', 'playpause', 'play', 'seek', 'position', 'volume'];
+	mpris_events.forEach(function(event) {
+		mpris.on(event, function(data) {
+			console.log("mpris: " + event + " -- " + data);
+		});
+	});
 
-mpris.on('previous', function() {
-	if(okToRestartPlayback()) {
-		audio.element.currentTime = 0;
-	} else {
-		goBackInQueue();	
-	}	
-})
+	mpris.on('next', function() {
+		playNextInQueue();
+	});
 
-mpris.on('playpause', function() {
-	togglePlaybackState();
-});
+	mpris.on('previous', function() {
+		if(okToRestartPlayback()) {
+			audio.element.currentTime = 0;
+		} else {
+			goBackInQueue();	
+		}	
+	})
+
+	mpris.on('playpause', function() {
+		togglePlaybackState();
+	});
+
+	exports.mpris = mpris;
+}

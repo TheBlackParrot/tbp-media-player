@@ -9,6 +9,7 @@
 	},
 
 	"enable": {
-		"notifications": true
+		"notifications": true,
+		"mpris": true
 	}
 }
