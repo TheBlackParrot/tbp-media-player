@@ -8,9 +8,9 @@ const remote = require('electron').remote;
 
 var last_notified = Date.now();
 $(audio.element).on("startPlaying", function(event, metadata) {
-	if( !main.settings.enable.notifications
-		|| remote.getCurrentWindow().isFocused()
-		|| Date.now() < (main.settings.notify_wait*1000) + last_notified) {
+	if(!main.settings.enable.notifications || remote.getCurrentWindow().isFocused() || Date.now() < (main.settings.notify_wait*1000) + last_notified) {
+		console.log("not notifying");
+		console.log(!main.settings.enable.notifications, remote.getCurrentWindow().isFocused(), Date.now() < (main.settings.notify_wait*1000) + last_notified);
 		return;
 	}
 
