@@ -90,6 +90,10 @@ sorttable = {
 	      headrow[i].sorttable_columnindex = i;
 	      headrow[i].sorttable_tbody = table.tBodies[0];
 	      dean_addEvent(headrow[i],"click", sorttable.innerSortFunction = function(e) {
+		// added for electromeda, enforces "sorttable_nosort" more strictly
+		if(this.className.search(/\bsorttable_nosort\b/) != -1) {
+			return;
+		}
 
           if (this.className.search(/\bsorttable_sorted\b/) != -1) {
             // if we're already sorted by this column, just
@@ -266,8 +270,8 @@ sorttable = {
     return aa-bb;
   },
   sort_alpha: function(a,b) {
-    if (a[0]==b[0]) return 0;
-    if (a[0]<b[0]) return -1;
+    if (a[0].toLowerCase()==b[0].toLowerCase()) return 0;
+    if (a[0].toLowerCase()<b[0].toLowerCase()) return -1;
     return 1;
   },
   sort_ddmm: function(a,b) {

@@ -55,16 +55,18 @@ function loadAllFiles(callback) {
 }
 exports.loadAllFiles = loadAllFiles;
 
-function fetchMetadata(file, stream) {
+function fetchMetadata(file, callback) {
 	var cached = localStorage.getItem(file);
 	if(cached) {
 		var metadata = all_files[file] = JSON.parse(cached);
-		//$(".main_list").append(createListElement(all_files[file], file));
-		return metadata;
-	} else {
-		if(!stream) {
-			var stream = fs.createReadStream(file);
+
+		if(typeof callback === "function") {
+			callback(metadata);
+		} else {
+			return metadata;
 		}
+	} else {
+		var stream = fs.createReadStream(file);
 
 		var parser = audioMetadata(stream, { duration: true }, function(err, metadata) {
 			if(err) {
@@ -79,26 +81,40 @@ function fetchMetadata(file, stream) {
 			//$(".main_list").append(createListElement(metadata, file));
 			stream.close();
 
-			return metadata;
+			if(typeof callback === "function") {
+				callback(metadata);
+			} else {
+				return metadata;
+			}
 		});
 	}
 }
 
-function showMainLibrary(callback) {
-	for(var file in all_files) {
-		var metadata = fetchMetadata(file);
-		var row = createListElement(metadata, file);
+function showView(view, callback) {
+	var file_list;
+	switch(view) {
+		case "library":
+			file_list = Object.keys(all_files);
+			break;
 
-		if(metadata) {
+		case "queue": 
+			file_list = queue;
+			break;
+	}
+
+	for(var id in file_list) {
+		var file = file_list[id];
+		fetchMetadata(file, function(metadata) {
+			var row = createListElement(metadata, file);
 			$(".main_list").append(row);
-		}
+		});
 	}
 
 	if(typeof callback === "function") {
 		callback();
 	}
 }
-exports.showMainLibrary = showMainLibrary;
+exports.showView = showView;
 
 /*
 		<table class="main_list">
@@ -110,16 +126,6 @@ exports.showMainLibrary = showMainLibrary;
 			</tr>
 		</table>
 */
-
-function clearList(callback) {
-	$(".main_list").empty();
-	$(".main_list").html('<tr><td>Title</td><td>Artist</td><td>Album</td><td>Length</td></tr>');
-
-	if(typeof callback === "function") {
-		callback();
-	}
-}
-exports.clearList = clearList;
 
 function createListElement(metadata, file) {
 	var row = $('<tr class="list_row standard-text standard-bg"></tr>');
@@ -133,6 +139,7 @@ function createListElement(metadata, file) {
 		console.warn("Could not obtain title for " + file + ": " + err);
 		title_element.text(file);
 		title_element.attr("title", file);
+		console.log(metadata);
 	}
 
 	try {
@@ -343,6 +350,55 @@ ipcRenderer.on("playback", function(event, command) {
 
 		case "restart":
 			audio.element.currentTime = 0;
+			break;
+	}
+});
+
+function clearListView() {
+	//var template = '<table class="main_list sortable"><tr id="table-header"><th>Title</th><th>Artist</th><th>Album</th><th>Length</th></tr></table>';
+	//$(".main_list").html(template);
+
+	$(".main_list .list_row").remove(); 
+}
+
+var current_view = "library";
+ipcRenderer.on("view", function(event, command) {
+	clearListView();
+
+	if(command == "reload") {
+		command = current_view;
+	} else {
+		current_view = command;
+	}
+
+	switch(command) {
+		case "library":
+			showView("library", function() {
+				$(".main_list th").removeClass("sorttable_nosort");
+			});
+			/*
+			showView("library", function() {
+				sorttable.makeSortable($(".main_list"));
+				$(".main_list").colResizable({
+					liveDrag: true,
+					minWidth: 70
+				});
+			});
+			*/
+			break;
+
+		case "queue":
+			showView("queue", function() {
+				$(".main_list th").addClass("sorttable_nosort");
+			});
+			/*
+			showView("queue", function() {
+				$(".main_list").colResizable({
+					liveDrag: true,
+					minWidth: 70
+				});
+			});
+			*/
 			break;
 	}
 });

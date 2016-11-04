@@ -17,7 +17,7 @@
 <body>
 	<div class="main">
 		<table class="main_list sortable">
-			<tr id="table-header" class="fixedsticky">
+			<tr id="table-header">
 				<th>Title</th>
 				<th>Artist</th>
 				<th>Album</th>
@@ -79,7 +79,7 @@
 
 			main.loadAllFiles(function() {
 				console.log("loaded files");
-				main.showMainLibrary();
+				main.showView("library");
 			});
 
 			$("#volume").change(function() {

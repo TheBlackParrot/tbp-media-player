@@ -29,7 +29,7 @@ const mainMenu_template = [
 			{
 				label: 'Developer Tools',
 				accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-				click (item, focusedWindow) {
+				click: function (item, focusedWindow) {
 					if (focusedWindow) focusedWindow.webContents.toggleDevTools()
 				}
 			},
@@ -45,6 +45,39 @@ const mainMenu_template = [
 	},
 
 	{
+		label: 'View',
+		submenu: [
+			{
+				label: 'Library',
+				accelerator: 'F1',
+				click: function() {
+					win.webContents.send('view', 'library');
+				}
+			},
+
+			{
+				label: 'Queue',
+				accelerator: 'F2',
+				click: function() {
+					win.webContents.send('view', 'queue');
+				}
+			},
+
+			{
+				type: 'separator'
+			},
+
+			{
+				label: 'Reload List',
+				accelerator: 'F5',
+				click: function() {
+					win.webContents.send('view', 'reload');
+				}
+			}
+		]
+	},
+
+	{
 		label: 'Window',
 		submenu: [
 			{
@@ -55,6 +88,10 @@ const mainMenu_template = [
 						focusedWindow.reload();
 					}
 				}
+			},
+
+			{
+				role: 'togglefullscreen'
 			}
 		]
 	},
