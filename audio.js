@@ -95,6 +95,8 @@ function updateNowPlayingInList(file) {
 	$(".row_playing .list_play").remove();
 	$(".row_playing").removeClass("row_playing");
 
+	$("#current-file").attr("data-file", file);
+
 	$('.list_row[file="' + file + '"]').addClass("row_playing");
 	var _ = $('.list_row[file="' + file + '"] td:first-child').prepend('<i class="fa fa-play list_play" aria-hidden="true"></i> ');
 	if(_.hasClass("row_selected")) {

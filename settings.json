@@ -11,5 +11,7 @@
 	"enable": {
 		"notifications": true,
 		"mpris": true
-	}
+	},
+
+	"notify_wait": 45
 }

@@ -7,41 +7,50 @@ function updateArt(file, callback) {
 	var stream = fs.createReadStream(file);
 
 	var parser = audioMetadata(stream, function(err, metadata) {
-		if(err) {
-			$(".art").hide();
-			throw err;
-			return;
-		}
-		
-		try {
-			var b64 = new Buffer(metadata.picture[0].data.toString('base64'));
-		} catch(err) {
-			$(".art").hide();
-			throw err;
-			return;
-		}
-
 		try {
 			// tmp doesn't seem to clean itself up?
 			fs.unlink(main.tmpArt);
 		} catch(err) {
 			// do nothing
 		}
+
+		if(err) {
+			$(".art").hide();
+			throw err;
+			return;
+		}
 		
+		var b64 = null;
+		try {
+			var b64 = new Buffer(metadata.picture[0].data.toString('base64'));
+		} catch(err) {
+			$(".art").hide();
+			console.warn("Couldn't load art: " + err);
+		}
+
 		var art = main.tmp.fileSync({
 			mode: 0644,
 			prefix: '.',
-			postfix: '.' + metadata.picture[0].format
+			postfix: '.' + (typeof metadata.picture[0] !== "undefined" ? metadata.picture[0].format : 'png')
 		});
+
+		if(b64) {
+			var art_data = metadata.picture[0].data;
+		} else {
+			var art_data = fs.readFileSync('./icon.png');
+		}
+
 		try {
-			fs.writeFileSync(art.name, metadata.picture[0].data);
+			fs.writeFileSync(art.name, art_data);
 			main.tmpArt = art.name
 		} catch(err) {
 			console.warn("Unable to write art to temporary file");
 		}
 
-		$(".art").show();
-		$("#art").attr("src", "data:image/" + metadata.picture[0].format + ";base64," + b64);
+		if(b64) {
+			$(".art").show();
+			$("#art").attr("src", "data:image/" + metadata.picture[0].format + ";base64," + b64);
+		}
 
 		if(typeof callback === "function") {
 			callback();

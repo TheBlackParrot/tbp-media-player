@@ -102,11 +102,17 @@ function showView(view, callback) {
 			break;
 	}
 
+	var current_file = $("#current-file").attr("data-file");
+
 	for(var id in file_list) {
 		var file = file_list[id];
 		fetchMetadata(file, function(metadata) {
 			var row = createListElement(metadata, file);
 			$(".main_list").append(row);
+
+			if(current_file == file) {
+				audio.updateNowPlayingInList(file);
+			}
 		});
 	}
 
@@ -224,11 +230,23 @@ $(".main_list").off("click").on("click", ".list_row", function(event) {
 	console.log("clicked " + file);
 
 	if($(this).hasClass("row_selected")) {
-		resetQueue();
-		populateQueue();
-		queue.splice(0, 0, file);
+		switch(current_view) {
+			case "queue":
+				console.log("queue position before: " + current_queue);
+				current_queue = $(this).closest('tr')[0].rowIndex-1;
+				console.log("queue position after: " + current_queue);
 
-		audio.playAudio(file);
+				audio.playAudio(file);
+				break;
+
+			default:
+				resetQueue();
+				populateQueue();
+				queue.splice(0, 0, file);
+
+				audio.playAudio(file);
+				break;
+		}
 	} else {
 		setActiveRow($(this));
 	}
@@ -358,6 +376,7 @@ function clearListView() {
 	//var template = '<table class="main_list sortable"><tr id="table-header"><th>Title</th><th>Artist</th><th>Album</th><th>Length</th></tr></table>';
 	//$(".main_list").html(template);
 
+	$(".main")[0].scrollTop = 0;
 	$(".main_list .list_row").remove(); 
 }
 
