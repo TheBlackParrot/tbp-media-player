@@ -40,6 +40,10 @@ exports.playAudio = function(file) {
 		element.play();
 	}
 
+	element.onplaying = function() {
+		$("#duration").text(util.getTimeStr(element.duration));
+	}
+
 	element.onplay = function() {
 		var metadata = main.all_files[file];
 
@@ -78,7 +82,6 @@ exports.playAudio = function(file) {
 		$(".details").css("opacity", "1");
 
 		$("#play-button i").removeClass("fa-play").addClass("fa-pause");
-		$("#duration").text(util.getTimeStr(element.duration));
 
 		/* TODO: move all mpris related events to a seperate script */
 		main.mpris.playbackStatus = 'Playing';

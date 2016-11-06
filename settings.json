@@ -10,7 +10,8 @@
 
 	"enable": {
 		"notifications": true,
-		"mpris": true
+		"mpris": true,
+		"startup_queue": true
 	},
 
 	"notify_wait": 45

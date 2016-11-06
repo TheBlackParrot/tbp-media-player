@@ -81,6 +81,9 @@
 
 			main.loadAllFiles(function() {
 				console.log("loaded files");
+				if(main.settings.enable.startup_queue) {
+					main.populateQueue();
+				}
 				main.showView("library");
 			});
 
