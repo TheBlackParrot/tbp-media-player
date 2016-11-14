@@ -59,6 +59,9 @@
 		</div>
 	</div>
 
+	<div class="hider">
+	</div>
+
 	<audio id="audio">
 		<source id="audio_src"/>
 	</audio>
@@ -84,6 +87,7 @@
 				if(main.settings.enable.startup_queue) {
 					main.populateQueue();
 				}
+				$(".hider").fadeOut(500);
 				main.showView("library");
 			});
 

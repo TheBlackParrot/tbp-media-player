@@ -227,3 +227,12 @@ body {
     font-size: 16pt !important;
     margin-right: 8px;
 }
+
+.hider {
+	background-color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+}
